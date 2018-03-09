@@ -24,8 +24,7 @@ RCT_EXPORT_METHOD(getContent:(RCTPromiseResolveBlock)resolve
   UIPasteboard *clipboard = [UIPasteboard generalPasteboard];
   resolve(@{
             @"text": clipboard.string ? : @"",
-            @"changeCount": @(clipboard.changeCount),
-            @"unequalId": @(clipboard.changeCount)
+            @"changeCount": @(clipboard.changeCount)
             });
 }
 
