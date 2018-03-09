@@ -1,0 +1,25 @@
+{
+  "name": "react-native-advanced-clipboard",
+  "version": "0.1.0",
+  "description": "Advanced clipboard for react native",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shimohq/react-native-advanced-clipboard.git"
+  },
+  "keywords": [
+    "clipboard",
+    "react",
+    "native",
+    "react-native"
+  ],
+  "author": "Bell <bell@greedlab.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shimohq/react-native-advanced-clipboard/issues"
+  },
+  "homepage": "https://github.com/shimohq/react-native-advanced-clipboard#readme"
+}
