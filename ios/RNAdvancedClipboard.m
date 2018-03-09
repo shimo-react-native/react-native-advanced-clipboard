@@ -5,11 +5,6 @@
 
 RCT_EXPORT_MODULE()
 
-- (dispatch_queue_t)methodQueue
-{
-  return dispatch_get_main_queue();
-}
-
 RCT_EXPORT_METHOD(setString:(NSString *)content)
 {
   UIPasteboard *clipboard = [UIPasteboard generalPasteboard];
