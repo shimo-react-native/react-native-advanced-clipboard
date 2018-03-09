@@ -28,9 +28,15 @@ public class AdvancedClipboardModule extends ContextBaseJavaModule {
         @Override
         public void onPrimaryClipChanged() {
             changeCount++;
-            SharedPreferences.Editor editor = mSharedPreferences.edit();
-            editor.putInt(CHANGE_COUNT_KEY, changeCount);
-            editor.apply();
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences.Editor editor = getSharedPreferences().edit();
+                    editor.putInt(CHANGE_COUNT_KEY, changeCount);
+                    editor.apply();
+                }
+            });
+            thread.start();
         }
     };
 
@@ -45,16 +51,19 @@ public class AdvancedClipboardModule extends ContextBaseJavaModule {
 
     @Override
     public void initialize() {
-        mSharedPreferences = getContext().getApplicationContext().getSharedPreferences("react-native-advanced-clipboard", Context.MODE_PRIVATE);
-        changeCount = mSharedPreferences.getInt(CHANGE_COUNT_KEY, 0);
-
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                changeCount = getSharedPreferences().getInt(CHANGE_COUNT_KEY, 0);
+            }
+        });
+        thread.start();
         getClipboardManager().addPrimaryClipChangedListener(mClipChangedListener);
     }
 
     @Override
     public void onCatalystInstanceDestroy() {
         super.onCatalystInstanceDestroy();
-
         getClipboardManager().removePrimaryClipChangedListener(mClipChangedListener);
     }
 
@@ -113,11 +122,17 @@ public class AdvancedClipboardModule extends ContextBaseJavaModule {
         clipboard.setPrimaryClip(clipdata);
     }
 
+    private SharedPreferences getSharedPreferences() {
+        if (mSharedPreferences == null) {
+            mSharedPreferences = getContext().getApplicationContext().getSharedPreferences("react-native-advanced-clipboard", Context.MODE_PRIVATE);
+        }
+        return mSharedPreferences;
+    }
+
     private ClipboardManager getClipboardManager() {
         if (mClipboardManager == null) {
             mClipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         }
         return mClipboardManager;
     }
-
 }

@@ -53,7 +53,6 @@ export default class App extends Component<Props> {
 
   _updateClipboard = async () => {
     const content = await Clipboard.getContent();
-    console.log('App', content);
     this.setState({
       text: content.text,
       changeCount: content.changeCount,

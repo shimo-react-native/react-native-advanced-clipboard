@@ -2,8 +2,6 @@ import { NativeModules, Platform } from 'react-native';
 
 const AdvancedClipboard = Platform.OS === 'ios' ? NativeModules.RNAdvancedClipboard : NativeModules.AdvancedClipboard;
 
-console.log('AdvancedClipboard', AdvancedClipboard);
-
 function getContent() {
   return AdvancedClipboard.getContent()
 }
