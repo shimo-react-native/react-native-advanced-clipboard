@@ -15,15 +15,15 @@ react-native link react-native-advanced-clipboard
 
 ### `getString`
 
-same to [official](https://facebook.github.io/react-native/docs/clipboard.html#getstring) 
+same to [official getString](https://facebook.github.io/react-native/docs/clipboard.html#getstring) 
 
 ### `setString`
 
-same to [official](https://facebook.github.io/react-native/docs/clipboard.html#setstring) 
+same to [official setString](https://facebook.github.io/react-native/docs/clipboard.html#setstring) 
 
 ### `getContent`
 
-Get content of clipboard, include string and changeCount, this method returns a Promise, so you can use following code to get clipboard content
+Get content of clipboard, include text changeCount and timestamp, this method returns a Promise, so you can use following code to get clipboard content
 
 ```javascript
 import Clipboard from 'react-native-advanced-clipboard';
@@ -33,13 +33,13 @@ async _getContent() {
 }
 ```
 
-content will be like this:
+the return value will be like this:
 
 ```json
 {
-  'text': 'clipboard text',
-  'changeCount': 100,
-  'timestamp': 125868 // support Android 8.0 only 
+  text: "clipboard text",
+  changeCount: 100,
+  timestamp: 125868 // only support Android 8.0 and later 
 }
 ```
  
