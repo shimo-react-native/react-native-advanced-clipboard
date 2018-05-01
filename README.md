@@ -35,7 +35,7 @@ async _getContent() {
 
 the return value will be like this:
 
-```json
+```javascript
 {
   text: "clipboard text",
   changeCount: 100,
