@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = 'RNAdvancedClipboard'
+  s.name             = 'react-native-advanced-clipboard'
   s.version          = '0.1.2'
   s.summary          = 'react-native-advanced-clipboard-shimohq'
 
