@@ -1,6 +1,6 @@
 {
   "name": "react-native-advanced-clipboard",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Advanced clipboard for react native",
   "main": "index.js",
   "scripts": {
