@@ -6,6 +6,9 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ContextBaseJavaModule;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -19,31 +22,19 @@ import com.facebook.react.bridge.WritableMap;
 
 public class AdvancedClipboardModule extends ContextBaseJavaModule {
     public static int changeCount = 0;
-    private static String CHANGE_COUNT_KEY = "changeCountKey";
+    private static final String CHANGE_COUNT_KEY = "changeCountKey";
 
     private ClipboardManager mClipboardManager = null;
     private SharedPreferences mSharedPreferences = null;
 
-    private ClipboardManager.OnPrimaryClipChangedListener mClipChangedListener = new ClipboardManager.OnPrimaryClipChangedListener() {
-        @Override
-        public void onPrimaryClipChanged() {
-            changeCount++;
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    SharedPreferences.Editor editor = getSharedPreferences().edit();
-                    editor.putInt(CHANGE_COUNT_KEY, changeCount);
-                    editor.apply();
-                }
-            });
-            thread.start();
-        }
-    };
+    @Nullable
+    private ClipboardManager.OnPrimaryClipChangedListener mClipChangedListener = null;
 
     public AdvancedClipboardModule(ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
+    @NonNull
     @Override
     public String getName() {
         return "AdvancedClipboard";
@@ -51,20 +42,33 @@ public class AdvancedClipboardModule extends ContextBaseJavaModule {
 
     @Override
     public void initialize() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                changeCount = getSharedPreferences().getInt(CHANGE_COUNT_KEY, 0);
-            }
-        });
+        Thread thread = new Thread(() -> changeCount = getSharedPreferences().getInt(CHANGE_COUNT_KEY, 0));
         thread.start();
-        getClipboardManager().addPrimaryClipChangedListener(mClipChangedListener);
     }
 
     @Override
     public void onCatalystInstanceDestroy() {
         super.onCatalystInstanceDestroy();
-        getClipboardManager().removePrimaryClipChangedListener(mClipChangedListener);
+        if (mClipChangedListener != null) {
+            getClipboardManager().removePrimaryClipChangedListener(mClipChangedListener);
+        }
+    }
+
+    @ReactMethod
+    public void init(Promise promise) {
+        if (mClipChangedListener == null) {
+            mClipChangedListener = () -> {
+                changeCount++;
+                Thread thread = new Thread(() -> {
+                    SharedPreferences.Editor editor = getSharedPreferences().edit();
+                    editor.putInt(CHANGE_COUNT_KEY, changeCount);
+                    editor.apply();
+                });
+                thread.start();
+            };
+            getClipboardManager().addPrimaryClipChangedListener(mClipChangedListener);
+        }
+        promise.resolve(null);
     }
 
     @ReactMethod
